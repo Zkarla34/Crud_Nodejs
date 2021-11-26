@@ -1,16 +1,15 @@
+var usuarios = require('../controladores/usuariosController.js').usuarios;
+var matematicas = require('../controladores/matematicasController.js').matematicas;
+
 app.get('/', function(request, response)
 {
   //  response.json({state:'ok'})
     response.send('<h1>HOLA MUNDO</h1>') //Renderización y posicionamiento seo
 })
 
-var matematicas = require('../controladores/matematicasController.js').matematicas;
-
 app.post('/sumar',function(request,response){  
   matematicas.sumar(request,response)
 })
-
-var usuarios = require('../controladores/usuariosController.js').usuarios;
 
 app.post('/Usuarios/Guardar',function(request,response){  
  usuarios.Guardar(request,response)

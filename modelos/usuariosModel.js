@@ -1,7 +1,7 @@
 var usuariosModel = {}
 const moongose = require('mongoose')
-
 const Schema = moongose.Schema;
+
 var UserSchema = new Schema({
     nombre:String
 })
