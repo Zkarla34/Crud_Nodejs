@@ -1,9 +1,13 @@
 var usuariosModel = {}
+
 const moongose = require('mongoose')
+
 const Schema = moongose.Schema;
 
 var UserSchema = new Schema({
-    nombre:String
+    nombre:String,
+    email:String,
+    password:String
 })
 
 const Mymodel = moongose.model('usuarios', UserSchema);
@@ -12,6 +16,9 @@ usuariosModel.Guardar = function(post,callback)
 {
     const instancia = new Mymodel
     instancia.nombre = post.nombre
+    instancia.email = post.email
+    instancia.password = post.password
+
     instancia.save((error,userCreate) => {
         if(error){
             console.log(error)
@@ -26,7 +33,7 @@ usuariosModel.Guardar = function(post,callback)
 
 usuariosModel.Listar = function(post, callback)
 {
-    Mymodel.find({}, {nombre:1, _id:1},(error, documentos) => {
+    Mymodel.find({}, {nombre:1, _id:1, email:1},(error, documentos) => {
         if(error)
         {
             console.log(error)
@@ -41,7 +48,7 @@ usuariosModel.Listar = function(post, callback)
 
 usuariosModel.ListarId = function(post, callback)
 {
-    Mymodel.find({_id:post.id}, {nombre:1, _id:1},(error, documentos) => {
+    Mymodel.find({_id:post.id}, {nombre:1, _id:1, email:1},(error, documentos) => {
         if(error)
         {
             console.log(error)
@@ -56,10 +63,8 @@ usuariosModel.ListarId = function(post, callback)
 
 usuariosModel.Actualizar = function(post, callback)
 {
-    Mymodel.findByIdAndUpdate(
-        post.id,
-        {nombre:post.nombre},
-        (error, usuariomodificado) =>
+    Mymodel.findByIdAndUpdate(post.id,{nombre:post.nombre},
+    (error, usuariomodificado) =>
         {
             if(error)
             {
@@ -70,12 +75,12 @@ usuariosModel.Actualizar = function(post, callback)
             {
                 return callback({state:true,info:usuariomodificado})
             }
-    })
+        })
 }
 
 usuariosModel.Eliminar = function(post, callback)
 {
-    Mymodel.findByIdAndDelete(post.id,(error, elimimado) =>
+    Mymodel.findByIdAndDelete(post.id,(error, eliminado) =>
     {
         if(error)
         {
@@ -85,6 +90,21 @@ usuariosModel.Eliminar = function(post, callback)
         else
         {
             return callback({state:true, info:eliminado})
+        }
+    })
+}
+
+usuariosModel.Login = function(post, callback)
+{
+    Mymodel.find({email:post.email}, {_id:1, password:1}, (error, documentos) =>{
+        if(error)
+        {
+            console.log(error)
+            return callback(error)
+        }
+        else
+        {
+            return callback(documentos)
         }
     })
 }
